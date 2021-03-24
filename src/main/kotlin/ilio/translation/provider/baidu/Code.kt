@@ -1,4 +1,4 @@
-package support
+package ilio.provider.translation.baidu
 
 enum class C {
 

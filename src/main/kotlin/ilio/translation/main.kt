@@ -1,3 +1,5 @@
+package ilio.translation
+
 import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.desktop.Window
 import androidx.compose.material.Text

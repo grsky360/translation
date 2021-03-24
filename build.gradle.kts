@@ -18,7 +18,10 @@ repositories {
 
 dependencies {
     implementation(compose.desktop.currentOs)
-    implementation("com.baidu.aip:java-sdk:4.15.6")
+
+    implementation("com.google.guava:guava:30.1.1-jre")
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
+    implementation("com.ilio.provider.translation.baidu.aip:java-sdk:4.15.6")
 }
 
 tasks.withType<KotlinCompile>() {
@@ -28,8 +31,8 @@ tasks.withType<KotlinCompile>() {
 compose.desktop {
     application {
         mainClass = "MainKt"
-        val process = Runtime.getRuntime().exec("/usr/libexec/java_home -v 16")
-        javaHome = String(process.inputStream.readAllBytes()).replace("\n", "")
+        val process = Runtime.getRuntime().exec("/usr/libexec/java_home -v 11+")
+        javaHome = String(process.inputStream.readBytes()).replace("\n", "")
         println("use java_home: $javaHome")
         process.destroyForcibly()
         nativeDistributions {
