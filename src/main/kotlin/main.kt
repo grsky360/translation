@@ -1,20 +1,53 @@
+import androidx.compose.desktop.LocalAppWindow
 import androidx.compose.desktop.Window
 import androidx.compose.material.Text
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
+import androidx.compose.ui.window.Tray
+import java.awt.Color
+import java.awt.image.BufferedImage
 
 fun main() = Window {
-    var text by remember { mutableStateOf("Hello, World!") }
+    val context = LocalAppWindow.current
+    context.window.isVisible = false
 
-    MaterialTheme {
-        Button(onClick = {
-            text = "Hello, Desktop!"
-        }) {
-            Text(text)
+    DisposableEffect {
+        val tray = Tray().apply {
+            icon(getTrayIcon())
+            menu(
+                MenuItem(
+                    name = "Increment value",
+                    onClick = {
+                        count.value++
+                    }
+                ),
+                MenuItem(
+                    name = "Send notification",
+                    onClick = {
+                        notify("Notification", "Message from MyApp!")
+                    }
+                ),
+                MenuItem(
+                    name = "Exit",
+                    onClick = {
+                        AppManager.exit()
+                    }
+                )
+            )
+        }
+        onDispose {
+            tray.remove()
         }
     }
+}
+
+fun getTrayIcon(): BufferedImage {
+    val size = 256
+    val image = BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB)
+    val graphics = image.createGraphics()
+    graphics.setColor(Color.orange)
+    graphics.fillOval(0, 0, size, size)
+    graphics.dispose()
+    return image
 }
