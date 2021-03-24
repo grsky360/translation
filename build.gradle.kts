@@ -28,8 +28,12 @@ tasks.withType<KotlinCompile>() {
 compose.desktop {
     application {
         mainClass = "MainKt"
+        val process = Runtime.getRuntime().exec("/usr/libexec/java_home -v 16")
+        javaHome = String(process.inputStream.readAllBytes()).replace("\n", "")
+        println("use java_home: $javaHome")
+        process.destroyForcibly()
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Dmg)
             packageName = "translation"
             packageVersion = "1.0.0"
         }
