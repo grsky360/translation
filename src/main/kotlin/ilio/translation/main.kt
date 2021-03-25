@@ -1,51 +1,52 @@
 package ilio.translation
 
-import androidx.compose.desktop.ComposePanel
-import androidx.compose.desktop.LocalAppWindow
-import androidx.compose.desktop.Window
+import androidx.compose.desktop.*
 import androidx.compose.material.Text
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.Notifier
 import java.awt.Color
 import java.awt.SystemTray
 import java.awt.TrayIcon
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
+import java.awt.event.*
 import java.awt.image.BufferedImage
 
-fun main() {
-    preInit()
-    window()
-}
-
-fun preInit() {
+val init: Unit = run {
     System.setProperty("apple.awt.UIElement", "true")
 }
 
-fun window() = Window {
-    val notifier = Notifier()
-    val context = LocalAppWindow.current
-    context.window.isVisible = false
+var context: ThreadLocal<AppWindow> = ThreadLocal()
+var notifier: Notifier = Notifier()
 
-//    val popup = Popup() {
-//        Text("this is popup")
-//    }
+fun getContext(): AppWindow {
+    return context.get()
+}
 
-    val trayIcon = TrayIcon(getTrayIcon(), "tooltip")
-    trayIcon.addMouseListener(object: MouseAdapter() {
-        override fun mouseClicked(e: MouseEvent?) {
-            notifier.notify("aa", "bb")
-            ComposePanel().apply {
-                setContent {
-                    Text("this is compose panal")
-                }
+fun setVisible(visible: Boolean) {
+    getContext().window.isVisible = visible
+}
 
-                isVisible = true
+fun main() = Window(
+    size = IntSize(300, 450),
+    location = IntOffset.Zero,
+    undecorated = true,
+    resizable = false,
+) {
+    val ctx = LocalAppWindow.current
+    context = ThreadLocal.withInitial { ctx }
+    setVisible(false)
+
+    getContext().events.onFocusLost = { setVisible(false) }
+
+    SystemTray.getSystemTray().add(TrayIcon(getTrayIcon(), "tooltip").apply {
+        addMouseListener(object : MouseAdapter() {
+            override fun mouseClicked(e: MouseEvent?) {
+                notifier.notify("aa", "bb")
+                setVisible(true)
+                getContext().window.requestFocus()
             }
-
-        }
+        })
     })
-
-    SystemTray.getSystemTray().add(trayIcon)
 }
 
 fun getTrayIcon(): BufferedImage {
