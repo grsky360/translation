@@ -3,12 +3,21 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    id("java")
     kotlin("jvm") version "1.4.30"
     id("org.jetbrains.compose") version "0.3.1"
 }
 
 group = "ilio"
 version = "1.0"
+
+sourceSets {
+    main {
+        java {
+            srcDir("src/main/kotlin")
+        }
+    }
+}
 
 repositories {
     maven { url = uri("https://maven.aliyun.com/repository/public") }
@@ -20,8 +29,8 @@ dependencies {
     implementation(compose.desktop.currentOs)
 
     implementation("com.google.guava:guava:30.1.1-jre")
-    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.2")
-    implementation("com.ilio.provider.translation.baidu.aip:java-sdk:4.15.6")
+    implementation("com.baidu.aip:java-sdk:4.15.6")
+    implementation("org.jodd:jodd-http:6.0.6")
 }
 
 tasks.withType<KotlinCompile>() {
@@ -30,12 +39,12 @@ tasks.withType<KotlinCompile>() {
 
 compose.desktop {
     application {
-        mainClass = "MainKt"
-        val process = Runtime.getRuntime().exec("/usr/libexec/java_home -v 11+")
-        javaHome = String(process.inputStream.readBytes()).replace("\n", "")
-        println("use java_home: $javaHome")
-        process.destroyForcibly()
+        mainClass = "ilio.translation.MainKt"
         nativeDistributions {
+            val process = Runtime.getRuntime().exec("/usr/libexec/java_home -v 11+")
+            javaHome = String(process.inputStream.readBytes()).replace("\n", "")
+            println("use java_home: $javaHome")
+            process.destroyForcibly()
             targetFormats(TargetFormat.Dmg)
             packageName = "translation"
             packageVersion = "1.0.0"
