@@ -2,7 +2,6 @@ package ilio.translation;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -35,18 +34,23 @@ public class PopupTester extends JFrame {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         final PopupTester popupTester = new PopupTester();
-        popupTester.setLayout(new FlowLayout());
         popupTester.setSize(300, 100);
-        popupTester.add(new JButton("Click Me") {
-            @Override
-            protected void fireActionPerformed(ActionEvent event) {
-                MessagePopup popup = new MessagePopup( popupTester, "Howdy" );
-                popup.show();
-            }
+
+        final TrayIcon trayIcon = new TrayIcon(MainKt.getTrayIcon());
+        SystemTray.getSystemTray().add(trayIcon);
+        var popupMenu = new PopupMenu();
+        var item = new MenuItem("Show");
+        trayIcon.setPopupMenu(popupMenu);
+        popupMenu.add(item);
+        item.addActionListener(e -> {
+//            var popupTester = new PopupTester();
+//            popupTester.setSize(300, 100);
+            popupTester.setVisible(true);
+            popupTester.setAlwaysOnTop(true);
+            popupTester.setAlwaysOnTop(false);
         });
-        popupTester.setVisible(true);
-        popupTester.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
 }
