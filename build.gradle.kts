@@ -1,11 +1,12 @@
+import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
 import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("java")
-    kotlin("jvm") version "1.4.30"
-    id("org.jetbrains.compose") version "0.3.1"
+    kotlin("jvm") version "1.4.31"
+    id("org.jetbrains.compose") version "0.3.2"
 }
 
 group = "ilio"
@@ -41,13 +42,26 @@ compose.desktop {
     application {
         mainClass = "ilio.translation.MainKt"
         nativeDistributions {
-            val process = Runtime.getRuntime().exec("/usr/libexec/java_home -v 11+")
-            javaHome = String(process.inputStream.readBytes()).replace("\n", "")
+            javaHome = findTargetJdk()
             println("use java_home: $javaHome")
-            process.destroyForcibly()
+
             targetFormats(TargetFormat.Dmg)
             packageName = "translation"
             packageVersion = "1.0.0"
         }
     }
+}
+
+fun findTargetJdk(): String {
+    val os: OperatingSystem = DefaultNativePlatform.getCurrentOperatingSystem()
+    if (os.isMacOsX) {
+        var process: Process ?= null
+        try {
+            process = Runtime.getRuntime().exec("/usr/libexec/java_home -v 11+ -v 16-")
+            return String(process.inputStream.readBytes()).replace("\n", "")
+        } finally {
+            process?.destroyForcibly()
+        }
+    }
+    return ""
 }
