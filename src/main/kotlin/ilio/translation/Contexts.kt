@@ -6,20 +6,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.MenuBar
+import java.awt.Window
 import java.awt.image.BufferedImage
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.system.exitProcess
 
-private val contextContainer = ConcurrentHashMap<String, AppWindow>()
-
-fun Context(name: String, block: () -> AppWindow): AppWindow {
-    var appWindow = contextContainer[name]
-    if (appWindow != null) {
-        return appWindow
-    }
-    appWindow = block()
-    contextContainer[name] = appWindow
-    return appWindow
-}
+private val contextContainer: ConcurrentHashMap<String, AppWindow> = ConcurrentHashMap()
+private val contentContainer: ConcurrentHashMap<AppWindow, Any> = ConcurrentHashMap()
 
 fun context(name: String,
             title: String = "JetpackDesktopWindow",
@@ -32,12 +25,13 @@ fun context(name: String,
             resizable: Boolean = true,
             events: WindowEvents = WindowEvents(),
             onDismissRequest: (() -> Unit)? = null,
+            init: (context: AppWindow) -> Unit = {},
             content: @Composable () -> Unit) : AppWindow {
-    var appWindow = contextContainer[name]
-    if (appWindow != null) {
-        return appWindow
+    var context = contextContainer[name]
+    if (context != null) {
+        return context
     }
-    appWindow = AppWindow(
+    context = AppWindow(
         title = title,
         size = size,
         location = location,
@@ -47,12 +41,42 @@ fun context(name: String,
         undecorated = undecorated,
         resizable = resizable,
         events = events,
-        onDismissRequest = onDismissRequest
-    )
+        onDismissRequest = onDismissRequest)
 
-    appWindow.show {
-        content()
+    init(context)
+
+    contextContainer[name] = context
+    contentContainer[context] = content as Any
+
+    return context
+}
+
+fun AppWindow.showMe() {
+    val content = contentContainer[this]
+    if (content != null) {
+        this.show {
+            @Suppress("UNCHECKED_CAST")
+            (content as @Composable () -> Unit)()
+        }
+        contentContainer.remove(this)
+    } else {
+        this.window.apply {
+            isVisible = true
+            topMe()
+        }
     }
-    contextContainer[name] = appWindow
-    return appWindow
+}
+
+fun AppWindow.hideMe() {
+    this.window.isVisible = false
+}
+
+fun AppWindow.exit() {
+    exitProcess(0)
+}
+
+fun Window.topMe() {
+    isAlwaysOnTop = true
+    requestFocus()
+    isAlwaysOnTop = false
 }
