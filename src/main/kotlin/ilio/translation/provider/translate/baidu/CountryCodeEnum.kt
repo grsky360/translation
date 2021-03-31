@@ -1,4 +1,4 @@
-package ilio.translation.provider.baidu
+package ilio.translation.provider.translate.baidu
 
 enum class CountryCodeEnum(val language: String, val code: String) {
 

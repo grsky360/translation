@@ -1,4 +1,4 @@
-package ilio.translation
+package ilio.translation.utils
 
 import androidx.compose.desktop.AppWindow
 import androidx.compose.desktop.WindowEvents

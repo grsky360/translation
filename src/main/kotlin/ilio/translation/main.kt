@@ -15,16 +15,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.Notifier
-import com.google.gson.Gson
-import ilio.translation.provider.baidu.TranslateRequest
-import ilio.translation.provider.baidu.translate
+import ilio.translation.provider.translate.baidu.TranslateRequest
+import ilio.translation.provider.translate.baidu.translate
+import ilio.translation.utils.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import java.awt.SystemTray
-import java.awt.TrayIcon
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
+import java.awt.Toolkit
 import java.awt.image.BufferedImage
+import kotlin.system.exitProcess
 
 private val init_block: Unit = run {
     // It will cause no auto focus while debugging
@@ -34,29 +32,26 @@ private val init_block: Unit = run {
 }
 
 val notifier: Notifier = Notifier()
-val gson: Gson = Gson()
 
 fun main() {
-    val defaultIcon = getTrayIcon()
-    val pressIcon = getTrayIcon(
-        foreground = java.awt.Color.red,
-        background = java.awt.Color(0x4C86ED))
-    val tray = TrayIcon(pressIcon)
-    tray.addMouseListener(object : MouseAdapter() {
-        override fun mousePressed(e: MouseEvent?) {
-            tray.image = pressIcon
-            if (e != null) {
-                popup().window.setLocation(e.x, e.y)
-                popup().showMe()
-            }
+    tray(getTrayIcon()) {
+        item("Debug") {
+            val toolkit = Toolkit.getDefaultToolkit()
+            popup().window.setLocation(
+                toolkit.screenSize.width - 100 - popup().width,
+                150
+            )
+            popup().showMe()
         }
 
-        override fun mouseReleased(e: MouseEvent?) {
-            tray.image = defaultIcon
-        }
-    })
-
-    SystemTray.getSystemTray().add(tray)
+        separator()
+        item("Preferences")
+        separator()
+        item("Input Translate")
+        item("OCR Translate")
+        separator()
+        item("Exit") { exitProcess(0) }
+    }
 }
 
 fun ctx(): AppWindow = context("main",
@@ -92,6 +87,7 @@ fun popup(): AppWindow = context("popup",
     ),
     init = {
         it.window.isAlwaysOnTop = true
+        it.keyboard.setShortcut(Key.Escape) { it.hideMe() }
     }
 ) {
     val input = remember { mutableStateOf("") }
@@ -104,9 +100,10 @@ fun popup(): AppWindow = context("popup",
             Button({
                 GlobalScope.async {
                     val response = translate(TranslateRequest(input.value))
-                    val map = gson.fromJson(response, Map::class.java)
-                    @Suppress("UNCHECKED_CAST")
-                    output.value = (map["trans_result"] as List<Map<String, *>>)[0]["dst"] as String
+                    output.value = response
+//                    val map = gson.fromJson(response, Map::class.java)
+//                    @Suppress("UNCHECKED_CAST")
+//                    output.value = (map["trans_result"] as List<Map<String, *>>)[0]["dst"] as String
                 }
             }) {
                 Text("Translate it")
@@ -117,14 +114,11 @@ fun popup(): AppWindow = context("popup",
     }
 }
 
-fun getTrayIcon(foreground: java.awt.Color = java.awt.Color.green, background: java.awt.Color ?= null): BufferedImage {
+fun getTrayIcon(): BufferedImage {
     val size = 256
     val image = BufferedImage(size, size, BufferedImage.TYPE_INT_ARGB)
     val graphics = image.createGraphics()
-    graphics.color = foreground
-    if (background != null) {
-        graphics.background = background
-    }
+    graphics.color = java.awt.Color.green
     graphics.fillOval(0, 0, size, size)
     graphics.dispose()
     return image
