@@ -3,6 +3,8 @@ package ilio.translation.utils
 import androidx.compose.desktop.AppWindow
 import androidx.compose.desktop.WindowEvents
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeysSet
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.MenuBar
@@ -14,8 +16,8 @@ import kotlin.system.exitProcess
 private val contextContainer: ConcurrentHashMap<String, AppWindow> = ConcurrentHashMap()
 private val contentContainer: ConcurrentHashMap<AppWindow, Any> = ConcurrentHashMap()
 
-fun context(name: String,
-            title: String = "JetpackDesktopWindow",
+fun context(id: String,
+            title: String = "",
             size: IntSize = IntSize(800, 600),
             location: IntOffset = IntOffset.Zero,
             centered: Boolean = true,
@@ -25,14 +27,15 @@ fun context(name: String,
             resizable: Boolean = true,
             events: WindowEvents = WindowEvents(),
             onDismissRequest: (() -> Unit)? = null,
-            init: (context: AppWindow) -> Unit = {},
-            content: @Composable () -> Unit) : AppWindow {
-    var context = contextContainer[name]
+            init: (AppWindow) -> Unit = {},
+            content: @Composable () -> Unit = {}
+) : AppWindow {
+    var context = contextContainer[id]
     if (context != null) {
         return context
     }
     context = AppWindow(
-        title = title,
+        title = title.ifEmpty { id },
         size = size,
         location = location,
         centered = centered,
@@ -45,7 +48,7 @@ fun context(name: String,
 
     init(context)
 
-    contextContainer[name] = context
+    contextContainer[id] = context
     contentContainer[context] = content as Any
 
     return context
@@ -67,11 +70,19 @@ fun AppWindow.showMe() {
     }
 }
 
+fun AppWindow.on(key: Key, callback: () -> Unit) {
+    this.keyboard.setShortcut(key, callback)
+}
+
+fun AppWindow.on(keysSet: KeysSet, callback: () -> Unit) {
+    this.keyboard.setShortcut(keysSet, callback)
+}
+
 fun AppWindow.hideMe() {
     this.window.isVisible = false
 }
 
-fun AppWindow.exit() {
+fun exit() {
     exitProcess(0)
 }
 

@@ -3,15 +3,11 @@ package ilio.translation
 import androidx.compose.desktop.AppWindow
 import androidx.compose.desktop.WindowEvents
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults.buttonColors
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material.*
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.Notifier
@@ -22,7 +18,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import java.awt.Toolkit
 import java.awt.image.BufferedImage
-import kotlin.system.exitProcess
 
 private val init_block: Unit = run {
     // It will cause no auto focus while debugging
@@ -43,14 +38,18 @@ fun main() {
             )
             popup().showMe()
         }
+        separator()
 
+        item("Preferences") {
+            ctx().showMe()
+        }
         separator()
-        item("Preferences")
-        separator()
+
         item("Input Translate")
         item("OCR Translate")
         separator()
-        item("Exit") { exitProcess(0) }
+
+        item("Exit") { exit() }
     }
 }
 
@@ -60,18 +59,39 @@ fun ctx(): AppWindow = context("main",
     undecorated = false,
     init = {
         it.window.defaultCloseOperation = 0
-        it.keyboard.setShortcut(Key.Escape) {
-            // TODO: Confirm to save or close
-            it.hideMe()
+        it.on(Key.Escape) {
+            context("close", title = "Save or Close", size = IntSize(250, 90), resizable = false) {
+                Row {
+                    Button({
+                        it.hideMe()
+                        context("close").hideMe()
+                    }) {
+                        Text("Save")
+                    }
+
+                    Button({
+                        it.hideMe()
+                        context("close").hideMe()
+                    }) {
+                        Text("Cancel")
+                    }
+                }
+            }.showMe()
         }
     }
 ) {
     MaterialTheme {
-        Button(
-            onClick = { ctx().exit() },
-            colors = buttonColors(backgroundColor = Color.Red)
-        ) {
-            Text("Exit")
+        val selectedIndex = remember { mutableStateOf(0) }
+        TabRow(selectedTabIndex = selectedIndex.value) {
+            Tab(selected = true, onClick = {
+
+            }, text = {
+                Text("abc")
+            })
+            Tab(selected = false, onClick = {
+            }, text = {
+                Text("abc")
+            })
         }
     }
 }
@@ -87,7 +107,7 @@ fun popup(): AppWindow = context("popup",
     ),
     init = {
         it.window.isAlwaysOnTop = true
-        it.keyboard.setShortcut(Key.Escape) { it.hideMe() }
+        it.on(Key.Escape) { it.hideMe() }
     }
 ) {
     val input = remember { mutableStateOf("") }
