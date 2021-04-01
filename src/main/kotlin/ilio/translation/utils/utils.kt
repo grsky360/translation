@@ -3,10 +3,16 @@
 package ilio.translation.utils
 
 import com.google.common.hash.Hashing
+import kotlinx.coroutines.*
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
+import kotlin.system.exitProcess
 
 //val json: Moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
+
+fun exit(code: Int = 0) {
+    exitProcess(code)
+}
 
 @Suppress("deprecation")
 fun md5(payload: String, charset: Charset = StandardCharsets.UTF_8) =
