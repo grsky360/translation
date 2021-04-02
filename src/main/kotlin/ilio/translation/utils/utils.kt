@@ -8,8 +8,6 @@ import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import kotlin.system.exitProcess
 
-//val json: Moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
-
 fun exit(code: Int = 0) {
     exitProcess(code)
 }
@@ -27,10 +25,3 @@ fun Int.randomString(): String {
     }
     return randomStr.toString()
 }
-
-//fun <T> String.parseJson(clazz: Class<T>): T {
-////    if (!clazz.isAnnotationPresent(JsonClass::class.java)) {
-////        TODO("NOT SUPPORT without @JsonClass")
-////    }
-//    return json.adapter(clazz).fromJson(this)!!
-//}

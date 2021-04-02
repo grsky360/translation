@@ -41,6 +41,12 @@ dependencies {
     implementation("com.google.guava:guava:30.1.1-jre")
     implementation("org.jodd:jodd-http:6.0.6")
     implementation("com.baidu.aip:java-sdk:4.15.6")
+    implementation("com.beust:klaxon:5.5")
+    implementation("commons-io:commons-io:2.8.0")
+    implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("org.apache.commons:commons-collections4:4.4")
+
+    testImplementation("io.mockk:mockk:1.11.0")
 }
 
 tasks.withType<KotlinCompile>() {
