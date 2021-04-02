@@ -20,18 +20,27 @@ sourceSets {
     }
 }
 
+kotlin {
+    sourceSets {
+        main {
+            kotlin.srcDir("src/support/kotlin")
+        }
+    }
+}
+
 repositories {
     maven { url = uri("https://maven.aliyun.com/repository/public") }
     maven { url = uri("https://maven.aliyun.com/repository/central") }
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
+    maven { url = uri("https://maven.aliyun.com/repository/google") }
 }
 
 dependencies {
     implementation(compose.desktop.currentOs)
 
     implementation("com.google.guava:guava:30.1.1-jre")
-    implementation("com.baidu.aip:java-sdk:4.15.6")
     implementation("org.jodd:jodd-http:6.0.6")
+    implementation("com.baidu.aip:java-sdk:4.15.6")
 }
 
 tasks.withType<KotlinCompile>() {
