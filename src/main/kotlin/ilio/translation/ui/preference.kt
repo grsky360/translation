@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.unit.IntSize
 import ilio.translation.ui.support.injectContext
-import ilio.translation.ui.support.shortcut.*
+import ilio.translation.support.extention.*
 
 val preferenceContext: AppWindow by lazy {
     injectContext("preference",

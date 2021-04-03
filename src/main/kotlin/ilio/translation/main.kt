@@ -1,6 +1,15 @@
 package ilio.translation
 
-import ilio.translation.ui.init
+import androidx.compose.ui.window.Notifier
 import ilio.translation.ui.launch
+import java.awt.Toolkit
 
-fun main() = launch(init)
+
+val notifier: Notifier by lazy { Notifier() }
+val toolkit: Toolkit by lazy { Toolkit.getDefaultToolkit() }
+
+fun main() = launch {
+    if (System.getProperty("debugging") != "true") {
+        System.setProperty("apple.awt.UIElement", "true")
+    }
+}

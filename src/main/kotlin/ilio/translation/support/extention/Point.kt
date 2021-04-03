@@ -1,4 +1,4 @@
-package ilio.translation.ui.support.shortcut
+package ilio.translation.support.extention
 
 import androidx.compose.ui.unit.IntOffset
 import java.awt.Point

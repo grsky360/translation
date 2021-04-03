@@ -1,6 +1,6 @@
 package ilio.translation.ui
 
-import ilio.translation.ui.support.shortcut.showMe
+import ilio.translation.support.extention.showMe
 import ilio.translation.utils.exit
 import ilio.translation.utils.tray
 import java.awt.Toolkit

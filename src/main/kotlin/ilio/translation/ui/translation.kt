@@ -12,9 +12,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.unit.IntSize
+import ilio.translation.support.extention.hideMe
+import ilio.translation.support.extention.on
 import ilio.translation.ui.support.injectContext
-import ilio.translation.ui.support.shortcut.hideMe
-import ilio.translation.ui.support.shortcut.on
 import ilio.translation.utils.async
 
 fun translationContext(): AppWindow = injectContext("popup",

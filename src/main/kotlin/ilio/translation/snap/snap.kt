@@ -1,8 +1,8 @@
 package ilio.translation.snap
 
 import ilio.translation.ui.getTrayIcon
-import ilio.translation.ui.support.shortcut.minus
-import ilio.translation.ui.support.shortcut.plus
+import ilio.translation.support.extention.minus
+import ilio.translation.support.extention.plus
 import ilio.translation.utils.Tray
 import ilio.translation.utils.exit
 import java.awt.Color

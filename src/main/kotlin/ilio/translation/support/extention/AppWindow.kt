@@ -1,4 +1,4 @@
-package ilio.translation.ui.support.shortcut
+package ilio.translation.support.extention
 
 import androidx.compose.desktop.AppWindow
 import androidx.compose.runtime.Composable
