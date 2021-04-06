@@ -31,7 +31,6 @@ object Clipboard {
             val result = transferable.getTransferData(DataFlavor.stringFlavor)
             if (result is String) result else null
         } catch (e: Exception) {
-            e.printStackTrace()
             null
         }
     }
@@ -45,7 +44,6 @@ object Clipboard {
             val result = transferable.getTransferData(DataFlavor.imageFlavor)
             if (result is Image) result else null
         } catch (e: java.lang.Exception) {
-            e.printStackTrace()
             null
         }
     }

@@ -4,8 +4,8 @@ import androidx.compose.desktop.AppWindow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeysSet
-import ilio.translation.ui.support.contentContainer
-import ilio.translation.ui.support.eventContainer
+import ilio.translation.support.contentContainer
+import ilio.translation.support.eventContainer
 import ilio.translation.utils.async
 import ilio.translation.utils.data.BlockingMap
 import java.util.concurrent.TimeUnit

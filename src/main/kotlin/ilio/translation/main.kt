@@ -1,7 +1,7 @@
 package ilio.translation
 
 import androidx.compose.ui.window.Notifier
-import ilio.translation.ui.launch
+import ilio.translation.component.launch
 import java.awt.Toolkit
 
 

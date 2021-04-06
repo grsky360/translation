@@ -5,8 +5,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("java")
-    kotlin("jvm") version "1.4.31"
-    id("org.jetbrains.compose") version "0.3.2"
+    kotlin("jvm") version "1.4.32"
+    id("org.jetbrains.compose") version "0.4.0-build179"
 }
 
 group = "ilio"
@@ -29,23 +29,34 @@ kotlin {
 }
 
 repositories {
-    maven { url = uri("https://maven.aliyun.com/repository/public") }
-    maven { url = uri("https://maven.aliyun.com/repository/central") }
+    mavenCentral()
+    jcenter()
     maven { url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev") }
-    maven { url = uri("https://maven.aliyun.com/repository/google") }
 }
 
 dependencies {
+    // Compose
     implementation(compose.desktop.currentOs)
+//    implementation("org.jetbrains.compose.ui:ui-desktop:0.4.0-idea-preview-build57")
+    implementation("com.arkivanov.decompose:decompose:0.2.1")
+    implementation("com.arkivanov.decompose:extensions-compose-jetbrains:0.2.1")
 
-    implementation("com.google.guava:guava:30.1.1-jre")
-    implementation("org.jodd:jodd-http:6.0.6")
-    implementation("com.baidu.aip:java-sdk:4.15.6")
-    implementation("com.beust:klaxon:5.5")
+    // Common lib
     implementation("commons-io:commons-io:2.8.0")
     implementation("org.apache.commons:commons-lang3:3.12.0")
     implementation("org.apache.commons:commons-collections4:4.4")
+    implementation("com.google.guava:guava:30.1.1-jre")
 
+    // Http
+    implementation("org.jodd:jodd-http:6.0.6")
+
+    // Baidu OCR
+    implementation("com.baidu.aip:java-sdk:4.15.6")
+
+    // Json Parser
+    implementation("com.beust:klaxon:5.5")
+
+    // Mock
     testImplementation("io.mockk:mockk:1.11.0")
 }
 

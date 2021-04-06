@@ -1,4 +1,4 @@
-package ilio.translation.ui.support
+package ilio.translation.support
 
 import androidx.compose.desktop.AppWindow
 import ilio.translation.utils.data.BlockingMap

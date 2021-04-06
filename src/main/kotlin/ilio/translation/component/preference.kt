@@ -1,4 +1,4 @@
-package ilio.translation.ui
+package ilio.translation.component
 
 import androidx.compose.desktop.AppWindow
 import androidx.compose.foundation.layout.Row
@@ -7,8 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.unit.IntSize
-import ilio.translation.ui.support.injectContext
 import ilio.translation.support.extention.*
+import ilio.translation.support.injectContext
 
 val preferenceContext: AppWindow by lazy {
     injectContext("preference",

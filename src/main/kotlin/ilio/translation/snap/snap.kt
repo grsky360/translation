@@ -1,6 +1,6 @@
 package ilio.translation.snap
 
-import ilio.translation.ui.getTrayIcon
+import ilio.translation.component.getTrayIcon
 import ilio.translation.support.extention.minus
 import ilio.translation.support.extention.plus
 import ilio.translation.utils.Tray

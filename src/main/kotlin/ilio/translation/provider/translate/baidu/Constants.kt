@@ -1,5 +1,6 @@
 package ilio.translation.provider.translate.baidu;
 
+import ilio.translation.config.Configuration
 import ilio.translation.utils.md5
 import ilio.translation.utils.randomString
 import jodd.http.HttpRequest
@@ -7,8 +8,8 @@ import jodd.http.HttpRequest
 const val HTTP_API = "http://api.fanyi.baidu.com/api/trans/vip/translate"
 const val HTTPS_API = "https://fanyi-api.baidu.com/api/trans/vip/translate"
 
-const val APP_ID = ""
-const val APP_SECRET = ""
+val APP_ID = Configuration.Translate.APP_ID
+val APP_SECRET = Configuration.Translate.APP_SECRET
 
 fun translate(request: TranslateRequest): String {
     val httpRequest = HttpRequest.post(HTTPS_API)
