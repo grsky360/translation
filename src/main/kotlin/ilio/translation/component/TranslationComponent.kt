@@ -13,7 +13,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.unit.IntSize
-import com.arkivanov.decompose.ComponentContext
 import ilio.translation.support.component.Component
 import ilio.translation.support.component.ComponentWindow
 import ilio.translation.support.component.ComponentWindowConfiguration
@@ -21,7 +20,7 @@ import ilio.translation.support.extention.hideMe
 import ilio.translation.support.extention.on
 import ilio.translation.utils.async
 
-class TranslationComponent(componentContext: ComponentContext) : Component, ComponentContext by componentContext {
+class TranslationComponent : Component {
 
     private var state by mutableStateOf(Model())
 
@@ -49,7 +48,7 @@ class TranslationComponent(componentContext: ComponentContext) : Component, Comp
     private data class Model(val input: String = "", val output: String = "")
 }
 
-object TranslationW : ComponentWindow() {
+object TranslationWindow : ComponentWindow<TranslationComponent>(::TranslationComponent) {
 
     override fun afterInitialize(context: AppWindow) {
         context.window.isAlwaysOnTop = true
@@ -67,8 +66,4 @@ object TranslationW : ComponentWindow() {
             }
         )
     )
-
-    override fun factory(): (ComponentContext) -> Component = ::TranslationComponent
 }
-
-fun main() = TranslationW.showMeStandalone()

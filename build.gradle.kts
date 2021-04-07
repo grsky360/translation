@@ -37,9 +37,6 @@ repositories {
 dependencies {
     // Compose
     implementation(compose.desktop.currentOs)
-//    implementation("org.jetbrains.compose.ui:ui-desktop:0.4.0-idea-preview-build57")
-    implementation("com.arkivanov.decompose:decompose:0.2.1")
-    implementation("com.arkivanov.decompose:extensions-compose-jetbrains:0.2.1")
 
     // Common lib
     implementation("commons-io:commons-io:2.8.0")

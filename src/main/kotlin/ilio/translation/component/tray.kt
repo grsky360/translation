@@ -1,6 +1,5 @@
 package ilio.translation.component
 
-import ilio.translation.support.extention.showMe
 import ilio.translation.utils.exit
 import ilio.translation.utils.tray
 import java.awt.Toolkit
@@ -9,11 +8,11 @@ import java.awt.image.BufferedImage
 fun registerTray() = tray(getTrayIcon()) {
     item("Debug") {
         val toolkit = Toolkit.getDefaultToolkit()
-        TranslationW.window.setLocation(
-            toolkit.screenSize.width - 100 - TranslationW.window.width,
+        TranslationWindow.window.setLocation(
+            toolkit.screenSize.width - 100 - TranslationWindow.window.width,
             150
         )
-        TranslationW.showMe()
+        TranslationWindow.showMe()
     }
     separator()
 
@@ -23,7 +22,7 @@ fun registerTray() = tray(getTrayIcon()) {
     separator()
 
     item("Preferences") {
-        preferenceContext.showMe()
+        PreferenceComponent.instance.showMe()
     }
     separator()
 

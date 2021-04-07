@@ -5,22 +5,20 @@ import androidx.compose.desktop.WindowEvents
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.MenuBar
-import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.extensions.compose.jetbrains.rememberRootComponent
 import java.awt.Window
 import java.awt.image.BufferedImage
 import javax.swing.SwingUtilities
 
-abstract class ComponentWindow {
+abstract class ComponentWindow<T: Component>(val factory: () -> T) {
     private var initialized: Boolean = false
-    private val context: AppWindow by lazy { initialize() }
+    val context: AppWindow by lazy { initialize() }
+    val window: Window get() = context.window
+    val component by container(factory)
     private val configuration: ComponentWindowConfiguration by lazy { configuration() }
 
-    val window: Window get() = context.window
-
-    protected open fun afterInitialize(context: AppWindow) {}
-
-    protected abstract fun factory(): (ComponentContext) -> Component
+    protected open fun afterInitialize(context: AppWindow) {
+        /** Do nothing **/
+    }
 
     protected open fun configuration(): ComponentWindowConfiguration = ComponentWindowConfiguration()
 
@@ -50,7 +48,7 @@ abstract class ComponentWindow {
     fun showMe() {
         if (!initialized) {
             context.show {
-                rememberRootComponent(factory = factory()).render()
+                factory().render()
             }
             initialized = true
         } else {
