@@ -1,7 +1,7 @@
 package ilio.translation.provider.ocr.baidu
 
 import com.baidu.aip.ocr.AipOcr
-import ilio.translation.config.Configuration
+import ilio.translation.config.PreferenceConfig
 import ilio.translation.utils.Clipboard.readImageClipboard
 import ilio.translation.utils.async
 import ilio.translation.utils.await
@@ -12,7 +12,7 @@ import java.io.ByteArrayOutputStream
 import javax.imageio.ImageIO
 
 fun takeOcr(): Deferred<List<String>> {
-    val ocr = AipOcr(Configuration.Ocr.APP_ID, Configuration.Ocr.APP_KEY, Configuration.Ocr.SECRET_KEY)
+    val ocr = AipOcr(PreferenceConfig.Ocr.APP_ID, PreferenceConfig.Ocr.APP_KEY, PreferenceConfig.Ocr.SECRET_KEY)
     val image = readImageClipboard() ?: return async { listOf("No image in clipboard, please take a screenshot or copy an image") }
     return async {
         val response = ocr.basicGeneral(image.toByteArray(), hashMapOf(

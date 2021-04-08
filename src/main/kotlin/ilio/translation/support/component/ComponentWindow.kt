@@ -5,6 +5,7 @@ import androidx.compose.desktop.WindowEvents
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.MenuBar
+import ilio.translation.support.extention.topMe
 import java.awt.Window
 import java.awt.image.BufferedImage
 import javax.swing.SwingUtilities
@@ -54,6 +55,7 @@ abstract class ComponentWindow<T: Component>(val factory: () -> T) {
         } else {
             window.isVisible = true
         }
+        context.topMe()
     }
 
     fun hideMe() {

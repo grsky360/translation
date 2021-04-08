@@ -1,30 +1,12 @@
 package ilio.translation.support.extention
 
 import androidx.compose.desktop.AppWindow
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeysSet
-import ilio.translation.support.contentContainer
-import ilio.translation.support.eventContainer
 import ilio.translation.utils.async
 import ilio.translation.utils.data.BlockingMap
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
-
-fun AppWindow.showMe() {
-    val content = contentContainer[this]
-    if (content != null) {
-        this.show {
-            @Suppress("UNCHECKED_CAST")
-            (content as @Composable () -> Unit)()
-        }
-        contentContainer.remove(this)
-    } else {
-        this.window.apply {
-            isVisible = true
-            topMe()
-        }
-    }
-}
 
 fun AppWindow.topMe() {
     window.apply {
@@ -56,6 +38,8 @@ fun AppWindow.on(key: Key, callback: () -> Unit) {
 fun AppWindow.on(keysSet: KeysSet, callback: () -> Unit) {
     this.keyboard.setShortcut(keysSet, callback)
 }
+
+val eventContainer: ConcurrentHashMap<AppWindow, BlockingMap<String, Any>> = ConcurrentHashMap()
 
 fun AppWindow.pushEvent(key: String, value: Any) {
     eventContainer

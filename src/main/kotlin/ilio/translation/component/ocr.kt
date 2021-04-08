@@ -12,11 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import ilio.translation.provider.ocr.baidu.takeOcr
 import ilio.translation.utils.onComplete
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-//val ocrResult = mutableStateOf("")
-
-@ExperimentalCoroutinesApi
 fun ocr() = Window("ocr_popup", undecorated = true) {
     val ctx = LocalAppWindow.current
     var ocrResult by remember { mutableStateOf("TextFieldValue(text = value") }
