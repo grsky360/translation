@@ -1,6 +1,7 @@
 package ilio.translation.support.component
 
 import androidx.compose.desktop.AppWindow
+import androidx.compose.desktop.ComposeWindow
 import androidx.compose.desktop.WindowEvents
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
@@ -17,7 +18,7 @@ abstract class ComponentWindow<T: Component>(val factory: () -> T) {
     val component by container(factory)
     private val configuration: ComponentWindowConfiguration by lazy { configuration() }
 
-    protected open fun afterInitialize(context: AppWindow) {
+    protected open fun afterInitialize(context: AppWindow, window: ComposeWindow) {
         /** Do nothing **/
     }
 
@@ -36,7 +37,7 @@ abstract class ComponentWindow<T: Component>(val factory: () -> T) {
             configuration.events,
             configuration.onDismissRequest
         )
-        afterInitialize(context)
+        afterInitialize(context, context.window)
         return context
     }
 

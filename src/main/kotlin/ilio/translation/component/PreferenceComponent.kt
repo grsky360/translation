@@ -1,8 +1,14 @@
 package ilio.translation.component
 
 import androidx.compose.desktop.AppWindow
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.desktop.ComposeWindow
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,13 +17,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import ilio.translation.config.PreferenceConfig
 import ilio.translation.config.PreferenceConfigData
+import ilio.translation.notifier
 import ilio.translation.support.component.Component
 import ilio.translation.support.component.ComponentWindow
 import ilio.translation.support.component.ComponentWindowConfiguration
 import ilio.translation.support.extention.hideMe
 import ilio.translation.support.extention.on
+import ilio.translation.support.ui.*
+import ilio.translation.utils.async
+import ilio.translation.utils.onError
 import ilio.translation.utils.toJson
 
 class PreferenceComponent : Component {
@@ -25,74 +36,87 @@ class PreferenceComponent : Component {
     private var preference by mutableStateOf(PreferenceConfigData())
 
     @Composable
-    override fun render() {
-        MaterialTheme {
-            Column(verticalArrangement = Arrangement.Center) {
-                Text("Translate API")
-                Box {
-                    Column {
-                        Text("Baidu")
-                        Divider()
-                        Row {
-                            Text("appId")
-                            TextField(preference.translateBaiduAppId, {
-                                preference = preference.copy(translateBaiduAppId = it)
-                            }, singleLine = true)
-                        }
-                        Row {
-                            Text("appSecret")
-                            TextField(preference.translateBaiduAppSecret, {
-                                preference = preference.copy(translateBaiduAppSecret = it)
-                            }, singleLine = true)
-                        }
-                    }
+    override fun render() = Root {
+        Block {
+            Row.fillMaxWidth(horizontalArrangement = Arrangement.End) {
+                Button({
+                    instance.hideMe()
+                }) {
+                    Text("Cancel")
                 }
-                Spacer(Modifier.padding(16.dp))
+                Button({
+                    instance.savePreference(preference)
+                }) {
+                    Text("Apply")
+                }
+                Button({
+                    instance.savePreference(preference)
+                    instance.hideMe()
+                }) {
+                    Text("OK")
+                }
+            }
+        }
+        Block.scrollable {
+            Text("Translate API")
+            Block {
+                Text("Baidu")
+                Divider()
+                TextField(
+                    value = preference.translateBaiduAppId,
+                    onValueChange = {
+                        preference = preference.copy(translateBaiduAppId = it)
+                    },
+                    singleLine = true,
+                    label = { Text("appId", fontSize = 12.sp) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer8dp()
+                TextField(
+                    value = preference.translateBaiduAppSecret,
+                    onValueChange = {
+                        preference = preference.copy(translateBaiduAppSecret = it)
+                    },
+                    singleLine = true,
+                    label = { Text("appSecret", fontSize = 12.sp) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            Spacer(Modifier.padding(16.dp))
 
-                Text("OCR API")
-                Box {
-                    Column {
-                        Text("Baidu")
-                        Divider()
-                        Row {
-                            Text("appId")
-                            TextField(preference.ocrBaiduAppId, {
-                                preference = preference.copy(ocrBaiduAppId = it)
-                            }, singleLine = true)
-                        }
-                        Row {
-                            Text("appKey")
-                            TextField(preference.ocrBaiduAppKey, {
-                                preference = preference.copy(ocrBaiduAppKey = it)
-                            }, singleLine = true)
-                        }
-                        Row {
-                            Text("secretKey")
-                            TextField(preference.ocrBaiduSecretKey, {
-                                preference = preference.copy(ocrBaiduSecretKey = it)
-                            }, singleLine = true)
-                        }
-                    }
-                }
-
-                Row {
-                    Button({
-                        instance.hideMe()
-                    }) {
-                        Text("Cancel")
-                    }
-                    Button({
-                        instance.savePreference(preference)
-                    }) {
-                        Text("Apply")
-                    }
-                    Button({
-                        instance.savePreference(preference)
-                        instance.hideMe()
-                    }) {
-                        Text("OK")
-                    }
-                }
+            Text("OCR API")
+            Block {
+                Text("Baidu")
+                Divider()
+                TextField(
+                    value = preference.ocrBaiduAppId,
+                    onValueChange = {
+                        preference = preference.copy(ocrBaiduAppId = it)
+                    },
+                    singleLine = true,
+                    label = { Text("appId", fontSize = 12.sp) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer8dp()
+                TextField(
+                    value = preference.ocrBaiduAppKey,
+                    onValueChange = {
+                        preference = preference.copy(ocrBaiduAppKey = it)
+                    },
+                    singleLine = true,
+                    label = { Text("appKey", fontSize = 12.sp) },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer8dp()
+                TextField(
+                    value = preference.ocrBaiduSecretKey,
+                    onValueChange = {
+                        preference = preference.copy(ocrBaiduSecretKey = it)
+                    },
+                    singleLine = true,
+                    label = { Text("secretKey", fontSize = 12.sp) },
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
     }
@@ -100,7 +124,11 @@ class PreferenceComponent : Component {
     object instance : ComponentWindow<PreferenceComponent>(::PreferenceComponent) {
 
         internal fun savePreference(preferenceConfigData: PreferenceConfigData) {
-            println(preferenceConfigData.toJson())
+            async {
+                println(preferenceConfigData.toJson())
+            }.onError { e ->
+                notifier.notify("Error", "$e")
+            }
         }
 
         override fun configuration(): ComponentWindowConfiguration = ComponentWindowConfiguration(
@@ -110,7 +138,7 @@ class PreferenceComponent : Component {
             undecorated = false
         )
 
-        override fun afterInitialize(context: AppWindow) {
+        override fun afterInitialize(context: AppWindow, window: ComposeWindow) {
             context.window.defaultCloseOperation = 0
             context.on(Key.Escape) {
                 context.hideMe()

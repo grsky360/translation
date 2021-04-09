@@ -11,12 +11,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import ilio.translation.provider.ocr.baidu.takeOcr
-import ilio.translation.utils.onComplete
+import ilio.translation.utils.onSuccess
 
 fun ocr() = Window("ocr_popup", undecorated = true) {
     val ctx = LocalAppWindow.current
     var ocrResult by remember { mutableStateOf("TextFieldValue(text = value") }
-    takeOcr().onComplete { list, _ ->
+    takeOcr().onSuccess { list ->
         ocrResult = list?.joinToString("\n") ?: ""
     }
     Row {

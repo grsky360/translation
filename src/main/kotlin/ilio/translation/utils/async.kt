@@ -23,8 +23,20 @@ fun <T> await(block: () -> Deferred<T>): T? {
     }
 }
 
-fun <T> Deferred<T>.onComplete(block: Deferred<T>.(T?, Throwable?) -> Unit) {
-    this.invokeOnCompletion {
-        block(getCompleted(), getCompletionExceptionOrNull())
+fun <T> Deferred<T>.onSuccess(block: Deferred<T>.(T?) -> Unit): Deferred<T> {
+    this.invokeOnCompletion { throwable ->
+        if (throwable == null) {
+            block(getCompleted())
+        }
     }
+    return this
+}
+
+fun <T> Deferred<T>.onError(block: Deferred<T>.(Throwable) -> Unit): Deferred<T> {
+    this.invokeOnCompletion { throwable ->
+        if (throwable != null) {
+            block(throwable)
+        }
+    }
+    return this
 }

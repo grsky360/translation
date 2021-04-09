@@ -4,9 +4,7 @@ import java.lang.reflect.Modifier
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
-data class ComponentInstance<T>(val component: T) {
-
-}
+data class ComponentInstance<T>(val component: T)
 
 operator fun <T> ComponentInstance<T>.getValue(any: Any?, property: KProperty<*>): T = component
 
