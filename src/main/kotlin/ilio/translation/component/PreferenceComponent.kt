@@ -18,8 +18,8 @@ import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ilio.translation.config.PreferenceConfig
-import ilio.translation.config.PreferenceConfigData
+import ilio.translation.config.Preference
+import ilio.translation.config.save
 import ilio.translation.notifier
 import ilio.translation.support.component.Component
 import ilio.translation.support.component.ComponentWindow
@@ -29,11 +29,11 @@ import ilio.translation.support.extention.on
 import ilio.translation.support.ui.*
 import ilio.translation.utils.async
 import ilio.translation.utils.onError
-import ilio.translation.utils.toJson
+import ilio.translation.config.preference as Preference
 
 class PreferenceComponent : Component {
 
-    private var preference by mutableStateOf(PreferenceConfigData())
+    private var preference: Preference by mutableStateOf(Preference)
 
     @Composable
     override fun render() = Root {
@@ -63,9 +63,9 @@ class PreferenceComponent : Component {
                 Text("Baidu")
                 Divider()
                 TextField(
-                    value = preference.translateBaiduAppId,
+                    value = preference.translate.appId,
                     onValueChange = {
-                        preference = preference.copy(translateBaiduAppId = it)
+                        preference = preference.copy(translate = preference.translate.copy(appId = it))
                     },
                     singleLine = true,
                     label = { Text("appId", fontSize = 12.sp) },
@@ -73,9 +73,9 @@ class PreferenceComponent : Component {
                 )
                 Spacer8()
                 TextField(
-                    value = preference.translateBaiduAppSecret,
+                    value = preference.translate.appSecret,
                     onValueChange = {
-                        preference = preference.copy(translateBaiduAppSecret = it)
+                        preference = preference.copy(translate = preference.translate.copy(appSecret = it))
                     },
                     singleLine = true,
                     label = { Text("appSecret", fontSize = 12.sp) },
@@ -89,9 +89,9 @@ class PreferenceComponent : Component {
                 Text("Baidu")
                 Divider()
                 TextField(
-                    value = preference.ocrBaiduAppId,
+                    value = preference.ocr.appId,
                     onValueChange = {
-                        preference = preference.copy(ocrBaiduAppId = it)
+                        preference = preference.copy(ocr = preference.ocr.copy(appId = it))
                     },
                     singleLine = true,
                     label = { Text("appId", fontSize = 12.sp) },
@@ -99,9 +99,9 @@ class PreferenceComponent : Component {
                 )
                 Spacer8()
                 TextField(
-                    value = preference.ocrBaiduAppKey,
+                    value = preference.ocr.appKey,
                     onValueChange = {
-                        preference = preference.copy(ocrBaiduAppKey = it)
+                        preference = preference.copy(ocr = preference.ocr.copy(appKey = it))
                     },
                     singleLine = true,
                     label = { Text("appKey", fontSize = 12.sp) },
@@ -109,9 +109,9 @@ class PreferenceComponent : Component {
                 )
                 Spacer8()
                 TextField(
-                    value = preference.ocrBaiduSecretKey,
+                    value = preference.ocr.secretKey,
                     onValueChange = {
-                        preference = preference.copy(ocrBaiduSecretKey = it)
+                        preference = preference.copy(ocr = preference.ocr.copy(secretKey = it))
                     },
                     singleLine = true,
                     label = { Text("secretKey", fontSize = 12.sp) },
@@ -123,9 +123,9 @@ class PreferenceComponent : Component {
 
     object instance : ComponentWindow<PreferenceComponent>(::PreferenceComponent) {
 
-        internal fun savePreference(preferenceConfigData: PreferenceConfigData) {
+        internal fun savePreference(preference: Preference) {
             async {
-                println(preferenceConfigData.toJson())
+                preference.save()
             }.onError { e ->
                 notifier.notify("Error", "$e")
             }
@@ -145,16 +145,4 @@ class PreferenceComponent : Component {
             }
         }
     }
-}
-
-data class PreferenceConfig(
-    val translateBaiduAppId: String = PreferenceConfig.Translate.APP_ID,
-    val translateBaiduAppSecret: String = PreferenceConfig.Translate.APP_SECRET,
-    val ocrBaiduAppId: String = PreferenceConfig.Ocr.APP_ID,
-    val ocrBaiduAppKey: String = PreferenceConfig.Ocr.APP_ID,
-    val ocrBaiduSecretKey: String = PreferenceConfig.Ocr.APP_ID
-)
-
-fun main() {
-    PreferenceComponent.instance.showMeStandalone()
 }
