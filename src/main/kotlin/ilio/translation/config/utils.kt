@@ -35,6 +35,7 @@ fun Preference.save() {
     FileOutputStream(Constants.configFile).bufferedWriter().use {
         it.write(this.toJson())
     }
+    Constants.preference = this
 }
 
 internal fun load(): Preference {
