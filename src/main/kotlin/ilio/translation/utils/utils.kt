@@ -3,7 +3,6 @@
 package ilio.translation.utils
 
 import com.google.common.hash.Hashing
-import kotlinx.coroutines.*
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import kotlin.system.exitProcess
@@ -24,4 +23,15 @@ fun Int.randomString(): String {
         }
     }
     return randomStr.toString()
+}
+
+operator fun (() -> Any).times(times: Int) {
+    for (i in 1..times) {
+        println(times)
+    }
+}
+operator fun Int.times(function: () -> Unit) {
+    for (i in 1..this) {
+        function()
+    }
 }

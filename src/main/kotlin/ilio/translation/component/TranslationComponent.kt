@@ -23,7 +23,7 @@ import ilio.translation.support.extention.hideMe
 import ilio.translation.support.extention.on
 import ilio.translation.support.ui.Block
 import ilio.translation.support.ui.Row
-import ilio.translation.support.ui.Spacer8dp
+import ilio.translation.support.ui.Spacer8
 import ilio.translation.utils.async
 
 class TranslationComponent : Component {
@@ -39,7 +39,7 @@ class TranslationComponent : Component {
                     println(it)
                 })
             }
-            Spacer8dp()
+            Spacer8()
 
             Row.verticalCenter {
                 Button({
@@ -51,7 +51,7 @@ class TranslationComponent : Component {
                     Text("Translate it")
                 }
             }
-            Spacer8dp()
+            Spacer8()
 
             Row.verticalCenter {
                 Text(state.output, modifier = Modifier.border(2.dp, Color.Gray))

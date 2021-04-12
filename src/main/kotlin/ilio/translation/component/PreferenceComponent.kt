@@ -71,7 +71,7 @@ class PreferenceComponent : Component {
                     label = { Text("appId", fontSize = 12.sp) },
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer8dp()
+                Spacer8()
                 TextField(
                     value = preference.translateBaiduAppSecret,
                     onValueChange = {
@@ -97,7 +97,7 @@ class PreferenceComponent : Component {
                     label = { Text("appId", fontSize = 12.sp) },
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer8dp()
+                Spacer8()
                 TextField(
                     value = preference.ocrBaiduAppKey,
                     onValueChange = {
@@ -107,7 +107,7 @@ class PreferenceComponent : Component {
                     label = { Text("appKey", fontSize = 12.sp) },
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer8dp()
+                Spacer8()
                 TextField(
                     value = preference.ocrBaiduSecretKey,
                     onValueChange = {

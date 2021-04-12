@@ -1,15 +1,13 @@
 package ilio.translation.support.ui
 
 import androidx.compose.desktop.DesktopTheme
-import androidx.compose.foundation.VerticalScrollbar
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.rememberScrollbarAdapter
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 data class RowBuilder(
@@ -69,11 +67,11 @@ object Block {
         Box(Modifier.fillMaxSize()) {
             Block(modifier = modifier.verticalScroll(verticalScrollState)) {
                 content()
-
             }
             VerticalScrollbar(
                 modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                adapter = rememberScrollbarAdapter(verticalScrollState)
+                adapter = rememberScrollbarAdapter(verticalScrollState),
+                style = ScrollbarStyleAmbient.current.copy(unhoverColor = Color.Transparent)
             )
         }
     }
@@ -83,10 +81,10 @@ object Block {
 fun Divider() = androidx.compose.material.Divider(modifier = Modifier.padding(4.dp))
 
 @Composable
-fun SpacerNdp(n: Int) = Spacer(Modifier.height(n.dp))
+fun Spacer(n: Int) = Spacer(Modifier.height(n.dp))
 
 @Composable
-fun Spacer4dp() = SpacerNdp(4)
+fun Spacer4() = Spacer(4)
 
 @Composable
-fun Spacer8dp() = SpacerNdp(8)
+fun Spacer8() = Spacer(8)
