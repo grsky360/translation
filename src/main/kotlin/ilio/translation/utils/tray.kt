@@ -2,6 +2,9 @@ package ilio.translation.utils
 
 import java.awt.*
 import java.awt.event.ActionEvent
+import java.awt.event.ActionListener
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 
 class Tray(image: Image) {
     private val trayIcon: TrayIcon = TrayIcon(image)
@@ -9,6 +12,13 @@ class Tray(image: Image) {
     init {
         trayIcon.isImageAutoSize = true
         trayIcon.popupMenu = PopupMenu()
+        if (os == OS.WINDOWS) {
+            trayIcon.addMouseListener(object : MouseAdapter() {
+                override fun mouseClicked(e: MouseEvent?) {
+                    println(e)
+                }
+            })
+        }
         SystemTray.getSystemTray().add(trayIcon)
     }
 
