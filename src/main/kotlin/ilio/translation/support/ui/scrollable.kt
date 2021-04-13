@@ -5,8 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.mouse.mouseScrollFilter
 
 @Composable
-fun scrollCallback(modifier: Modifier, block: () -> Unit): Modifier {
-    return modifier.mouseScrollFilter { _, _ ->
+fun Modifier.scrollCallback(block: () -> Unit): Modifier {
+    return this.mouseScrollFilter { _, _ ->
         block()
         false
     }

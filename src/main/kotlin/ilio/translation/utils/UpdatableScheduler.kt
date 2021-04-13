@@ -13,9 +13,9 @@ class UpdatableScheduler(private val pollSize: Int = 1) {
     }
 
     fun schedule(task: UpdatableTask): UpdatableTask {
-        if (!queue.contains(task)) {
+//        if (!queue.contains(task)) {
             executor.execute(task)
-        }
+//        }
         return task
     }
 }

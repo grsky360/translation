@@ -9,8 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import ilio.translation.utils.ResettableScheduler
 import ilio.translation.utils.UpdatableScheduler
-import ilio.translation.utils.UpdatableTask
 
 data class RowBuilder(
     val modifier: Modifier = Modifier,
@@ -66,16 +66,22 @@ object Block {
     fun scrollable(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
         val verticalScrollState = rememberScrollState(0)
         var scrolling by remember { mutableStateOf(false) }
-        val scheduler: UpdatableScheduler by lazy { UpdatableScheduler() }
-        val task = UpdatableTask(1000) {
-            scrolling = false
+        val task = remember {
+            ResettableScheduler().newTask(1000) {
+                scrolling = false
+            }
         }
-        Box(scrollCallback(Modifier.fillMaxSize()) {
-            scrolling = true
-            scheduler.schedule(task)
-            task.reset()
-        }) {
-            Block(modifier = modifier.verticalScroll(verticalScrollState)) {
+        val task2 = remember {
+            UpdatableScheduler().schedule(1000) {
+                scrolling = false
+            }
+        }
+        Box(Modifier.fillMaxSize()) {
+            Block(modifier = modifier.verticalScroll(verticalScrollState).scrollCallback {
+                scrolling = true
+//                task.reset()
+                task2.reset()
+            }) {
                 content()
             }
 

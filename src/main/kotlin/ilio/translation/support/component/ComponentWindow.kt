@@ -7,14 +7,14 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.window.MenuBar
 import ilio.translation.support.extention.topMe
-import java.awt.Window
 import java.awt.image.BufferedImage
 import javax.swing.SwingUtilities
+import javax.swing.WindowConstants
 
 abstract class ComponentWindow<T: Component>(val factory: () -> T) {
     private var initialized: Boolean = false
     val context: AppWindow by lazy { initialize() }
-    val window: Window get() = context.window
+    val window: ComposeWindow get() = context.window
     val component by container(factory)
     private val configuration: ComponentWindowConfiguration by lazy { configuration() }
 
@@ -44,6 +44,7 @@ abstract class ComponentWindow<T: Component>(val factory: () -> T) {
     fun showMeStandalone() {
         SwingUtilities.invokeAndWait {
             showMe()
+            window.defaultCloseOperation = WindowConstants.HIDE_ON_CLOSE
         }
     }
 
