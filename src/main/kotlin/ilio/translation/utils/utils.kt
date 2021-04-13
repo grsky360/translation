@@ -3,8 +3,12 @@
 package ilio.translation.utils
 
 import com.google.common.hash.Hashing
+import java.awt.Image
+import java.awt.image.BufferedImage
+import java.io.ByteArrayOutputStream
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
+import javax.imageio.ImageIO
 import kotlin.system.exitProcess
 
 fun exit(code: Int = 0) {
@@ -23,6 +27,17 @@ fun Int.randomString(): String {
         }
     }
     return randomStr.toString()
+}
+
+fun Image.toByteArray(): ByteArray {
+    val out = ByteArrayOutputStream()
+    val width = this.getWidth(null)
+    val height = this.getHeight(null)
+    val bufferedImage = BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
+    bufferedImage.createGraphics()
+        .drawImage(this, 0, 0, width, height, null)
+    ImageIO.write(bufferedImage, "png", ImageIO.createImageOutputStream(out))
+    return out.toByteArray()
 }
 
 operator fun (() -> Any).times(times: Int) {

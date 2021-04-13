@@ -146,3 +146,5 @@ class PreferenceComponent : Component {
         }
     }
 }
+
+fun main() = PreferenceComponent.instance.showMeStandalone()

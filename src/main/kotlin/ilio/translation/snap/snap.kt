@@ -1,6 +1,6 @@
 package ilio.translation.snap
 
-import ilio.translation.component.getTrayIcon
+import ilio.translation.resources.Logo
 import ilio.translation.support.ui.minus
 import ilio.translation.support.ui.plus
 import ilio.translation.utils.Tray
@@ -13,14 +13,11 @@ import javax.swing.JFrame
 import javax.swing.WindowConstants
 import kotlin.system.exitProcess
 
-val init_block = run {
-//    System.setProperty("apple.awt.UIElement", "true")
-}
 val backgroundColor = Color(128, 128, 128)
 val backgroundColor2 = Color(64, 64, 64)
 
 fun main() {
-    Tray(getTrayIcon()).apply {
+    Tray(Logo.image).apply {
         item("Debug") {
             snap()
         }
