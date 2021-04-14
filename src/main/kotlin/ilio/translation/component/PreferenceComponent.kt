@@ -37,7 +37,7 @@ class PreferenceComponent : Component {
 
     @Composable
     override fun render() = Root {
-        val changing: Boolean = compute(preference) {
+        val changing: Boolean = computed(preference) {
             preference != Preference
         }
 

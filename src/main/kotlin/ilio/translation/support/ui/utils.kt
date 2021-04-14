@@ -85,6 +85,6 @@ fun Spacer4() = Spacer(4)
 fun Spacer8() = Spacer(8)
 
 @Composable
-fun <T> compute(key: Any?, vararg keys: Any?, block: () -> T): T {
-    return remember(key, keys, block)
+fun <T> computed(vararg keys: Any?, block: () -> T): T {
+    return remember(keys) { block() }
 }
