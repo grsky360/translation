@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("java")
     kotlin("jvm") version "1.4.32"
-    id("org.jetbrains.compose") version "0.4.0-build180"
+    id("org.jetbrains.compose") version "0.4.0-build182"
 }
 
 group = "ilio"
