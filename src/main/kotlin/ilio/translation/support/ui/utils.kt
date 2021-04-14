@@ -6,6 +6,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -82,3 +83,8 @@ fun Spacer4() = Spacer(4)
 
 @Composable
 fun Spacer8() = Spacer(8)
+
+@Composable
+fun <T> compute(key: Any?, vararg keys: Any?, block: () -> T): T {
+    return remember(key, keys, block)
+}

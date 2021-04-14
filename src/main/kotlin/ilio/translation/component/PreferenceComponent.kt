@@ -9,7 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.unit.IntSize
@@ -34,7 +37,7 @@ class PreferenceComponent : Component {
 
     @Composable
     override fun render() = Root {
-        val changing: Boolean = remember(preference) {
+        val changing: Boolean = compute(preference) {
             preference != Preference
         }
 
