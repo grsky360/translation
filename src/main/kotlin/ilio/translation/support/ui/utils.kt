@@ -1,16 +1,14 @@
 package ilio.translation.support.ui
 
 import androidx.compose.desktop.DesktopTheme
-import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import ilio.translation.utils.ResettableScheduler
-import ilio.translation.utils.UpdatableScheduler
 
 data class RowBuilder(
     val modifier: Modifier = Modifier,
@@ -65,34 +63,10 @@ object Block {
     @Composable
     fun scrollable(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
         val verticalScrollState = rememberScrollState(0)
-        var scrolling by remember { mutableStateOf(false) }
-        val task = remember {
-            ResettableScheduler().newTask(1000) {
-                scrolling = false
-            }
-        }
-        val task2 = remember {
-            UpdatableScheduler().schedule(1000) {
-                scrolling = false
-            }
-        }
         Box(Modifier.fillMaxSize()) {
-            Block(modifier = modifier.verticalScroll(verticalScrollState).scrollCallback {
-                scrolling = true
-//                task.reset()
-                task2.reset()
-            }) {
+            Block(modifier = modifier.verticalScroll(verticalScrollState).verticalScrollbar(verticalScrollState)) {
                 content()
             }
-
-            val style = ScrollbarStyleAmbient.current
-            VerticalScrollbar(
-                adapter = rememberScrollbarAdapter(verticalScrollState),
-                modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
-                style = style.copy(
-                    unhoverColor = if (scrolling) style.unhoverColor else Color.Transparent
-                )
-            )
         }
     }
 }

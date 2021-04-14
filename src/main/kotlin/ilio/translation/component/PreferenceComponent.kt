@@ -135,7 +135,7 @@ class PreferenceComponent : Component {
             title = "Preferences",
             size = IntSize(700, 450),
             resizable = false,
-            undecorated = false
+            undecorated = true
         )
 
         override fun afterInitialize(context: AppWindow, window: ComposeWindow) {
