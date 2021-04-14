@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.unit.IntSize
@@ -37,22 +34,27 @@ class PreferenceComponent : Component {
 
     @Composable
     override fun render() = Root {
+        val changing: Boolean = remember(preference) {
+            preference != Preference
+        }
+
         Block {
             Row.fillMaxWidth(horizontalArrangement = Arrangement.End) {
                 Button({
                     instance.hideMe()
+                    preference = Preference
                 }) {
                     Text("Cancel")
                 }
                 Button({
                     instance.savePreference(preference)
-                }) {
+                }, enabled = changing) {
                     Text("Apply")
                 }
                 Button({
                     instance.savePreference(preference)
                     instance.hideMe()
-                }) {
+                }, enabled = changing) {
                     Text("OK")
                 }
             }
